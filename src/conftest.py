@@ -1,5 +1,7 @@
+import os
 import pytest
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 from appium import webdriver as appium_driver
 from appium.options.android import UiAutomator2Options
 from tools.main_page import MainPage
@@ -10,6 +12,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select
 
 from time import sleep
+
+os.environ["SELENIUM_CACHE"] = os.environ.get("SELENIUM_CACHE", "/tmp/selenium-cache")
 
 options_otomoto = UiAutomator2Options()
 options_otomoto.platform_name = "Android"
@@ -35,7 +39,10 @@ def driver(request):
         sleep(5)
         driver.platform = platform
     else:
-        driver = webdriver.Chrome()
+        chrome_options = Options()
+        # Use Jenkins-defined Chrome user-data directory
+        chrome_options.add_argument(f"--user-data-dir={os.environ.get('CHROME_USER_DATA_DIR', '/tmp/chrome-profile')}")
+        driver = webdriver.Chrome(options=chrome_options)
         driver.get("https://www.otomoto.pl/")
         driver.platform = platform
 
