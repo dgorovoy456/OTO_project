@@ -42,7 +42,6 @@ def driver(request):
         sleep(5)
         driver.platform = platform
     else:
-        service = Service()
         chrome_options = Options()
         # Use Jenkins-defined Chrome user-data directory
 
