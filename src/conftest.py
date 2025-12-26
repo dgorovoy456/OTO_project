@@ -1,5 +1,7 @@
 import os
-os.environ["SELENIUM_CACHE"] = os.environ.get("SELENIUM_CACHE", "/tmp/selenium-cache")
+
+# os.environ["SELENIUM_CACHE"] = os.environ.get("SELENIUM_CACHE", "/tmp/selenium-cache")
+
 import pytest
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -40,6 +42,8 @@ def driver(request):
     else:
         chrome_options = Options()
         # Use Jenkins-defined Chrome user-data directory
+
+        chrome_options.add_argument(f"--disk-cache={os.environ.get('SELENIUM_CACHE', '/tmp/selenium-cache')}")
         chrome_options.add_argument(f"--user-data-dir={os.environ.get('CHROME_USER_DATA_DIR', '/tmp/chrome-profile')}")
         driver = webdriver.Chrome(options=chrome_options)
         driver.get("https://www.otomoto.pl/")
