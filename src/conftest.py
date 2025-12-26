@@ -46,8 +46,15 @@ def driver(request):
         # Use Jenkins-defined Chrome user-data directory
 
         chrome_options.add_argument("--headless=new")
+        chrome_options.add_argument("--window-size=1920,1080")
         chrome_options.add_argument("--no-sandbox")
         chrome_options.add_argument("--disable-dev-shm-usage")
+        chrome_options.add_argument("--force-device-scale-factor=1")
+        chrome_options.add_argument(
+            "user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+            "AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/136.0.7103.113 Safari/537.36"
+        )
         driver = webdriver.Chrome(options=chrome_options)
         driver.get("https://www.otomoto.pl/")
         driver.platform = platform
