@@ -1,4 +1,5 @@
 import os
+os.environ["SELENIUM_CACHE"] = os.environ.get("SELENIUM_CACHE", "/tmp/selenium-cache")
 import pytest
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -12,8 +13,6 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select
 
 from time import sleep
-
-os.environ["SELENIUM_CACHE"] = os.environ.get("SELENIUM_CACHE", "/tmp/selenium-cache")
 
 options_otomoto = UiAutomator2Options()
 options_otomoto.platform_name = "Android"
