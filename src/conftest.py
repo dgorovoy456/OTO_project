@@ -46,8 +46,9 @@ def driver(request):
         chrome_options = Options()
         # Use Jenkins-defined Chrome user-data directory
 
-        chrome_options.add_argument(f"--disk-cache={os.environ.get('SELENIUM_CACHE', '/tmp/selenium-cache')}")
-        # chrome_options.add_argument(f"--user-data-dir={os.environ.get('CHROME_USER_DATA_DIR', '/tmp/chrome-profile')}")
+        chrome_options.add_argument("--headless=new")
+        chrome_options.add_argument("--no-sandbox")
+        chrome_options.add_argument("--disable-dev-shm-usage")
         driver = webdriver.Chrome(service=service, options=chrome_options)
         driver.get("https://www.otomoto.pl/")
         driver.platform = platform
