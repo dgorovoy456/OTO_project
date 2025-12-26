@@ -13,6 +13,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select
+from selenium.webdriver.chrome.service import Service
+
 
 from time import sleep
 
@@ -40,12 +42,13 @@ def driver(request):
         sleep(5)
         driver.platform = platform
     else:
+        service = Service()
         chrome_options = Options()
         # Use Jenkins-defined Chrome user-data directory
 
         chrome_options.add_argument(f"--disk-cache={os.environ.get('SELENIUM_CACHE', '/tmp/selenium-cache')}")
         # chrome_options.add_argument(f"--user-data-dir={os.environ.get('CHROME_USER_DATA_DIR', '/tmp/chrome-profile')}")
-        driver = webdriver.Chrome(options=chrome_options)
+        driver = webdriver.Chrome(service=service, options=chrome_options)
         driver.get("https://www.otomoto.pl/")
         driver.platform = platform
 
