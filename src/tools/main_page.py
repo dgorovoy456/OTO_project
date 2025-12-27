@@ -28,6 +28,7 @@ class BaseDriver:
         self.driver = driver
 
     def click(self, by, path):
+        xml = self.driver.page_source
         WebDriverWait(self.driver, 20, ignored_exceptions=ignored_exceptions).until(
             EC.visibility_of_element_located((by, path))).click()
 
@@ -125,19 +126,19 @@ class MainAndroidPage(MainPageBase):
         super().__init__(driver)
 
     def set_brand(self, brand):
-        self.click(AppiumBy.XPATH, "//*[contains(@hint, 'Marka')]")
-        self.click(AppiumBy.XPATH, "//*[contains(@hint, 'Marka')]")
-        self.send_keys(AppiumBy.XPATH, "//*[contains(@hint, 'Marka')]", brand)
+        self.click(AppiumBy.ACCESSIBILITY_ID, "Marka, Model, Generacja")
+        self.click(AppiumBy.ACCESSIBILITY_ID, "Marka\nWyszukaj wg marka")
+        self.send_keys(AppiumBy.CLASS_NAME, "android.widget.EditText", brand)
         self.click(AppiumBy.ACCESSIBILITY_ID, brand)
 
     def set_model(self, model):
-        self.click(AppiumBy.XPATH, "//*[contains(@hint, 'Wpisz model')]")
-        self.send_keys(AppiumBy.XPATH, "//*[contains(@hint, 'Wpisz model')]", model)
+        self.click(AppiumBy.ACCESSIBILITY_ID, "Wpisz model, wersję lub inne szczegóły")
+        self.send_keys(AppiumBy.CLASS_NAME, "android.widget.EditText", model)
         self.click(AppiumBy.ACCESSIBILITY_ID, model)
         self.click(AppiumBy.ACCESSIBILITY_ID, "Pokaż wyniki")
 
     def set_year(self, year):
-        self.click(AppiumBy.XPATH, "//*[contains(@hint, 'Rok produkcji')]")
+        self.click(AppiumBy.ACCESSIBILITY_ID, "Rok produkcji")
         self.click(AppiumBy.XPATH, "//*[contains(@hint, 'Od')]")
         self.send_keys(AppiumBy.XPATH, "//*[contains(@hint, 'Od')]", year)
         self.click(AppiumBy.ACCESSIBILITY_ID, "Pokaż wyniki")
