@@ -2,7 +2,7 @@ import functools
 import time
 
 
-def retry_on_except(retries=3, delay=1):
+def retry_on_except(retries=3, delay=1, fail_silently=False):
     def decorator(func):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
@@ -13,7 +13,8 @@ def retry_on_except(retries=3, delay=1):
                 except Exception as e:
                     last_exception = e
                     time.sleep(delay)
-            raise last_exception
+            if not fail_silently:
+                raise last_exception
 
         return wrapper
 
