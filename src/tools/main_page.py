@@ -6,15 +6,25 @@ import time
 from dataclasses import dataclass
 from selenium.common.exceptions import StaleElementReferenceException, NoSuchElementException
 from appium.webdriver.common.appiumby import AppiumBy
-
 from tools.helper_tools import retry_on_except
-brand_path = "/html/body/div[1]/div/div/div/main/div[1]/article/article/fieldset/form/section[1]/div[1]/div/div[1]/div/div/input"
-model_path = "/html/body/div[1]/div/div/div/main/div[1]/article/article/fieldset/form/section[1]/div[2]/div/div[1]/div/div/input"
-model_popup_button = "/html/body/div[1]/div/div/div/main/div[1]/article/article/fieldset/form/section[1]/div[2]/div/div/div/div/div/div/button/svg"
-year_path = "/html/body/div[1]/div/div/div/main/div[1]/article/article/fieldset/form/section[1]/div[4]/div/div[1]/div/div/input"
+
+brand_path = (
+    "/html/body/div[1]/div/div/div/main/div[1]/article/article/fieldset/form/section[1]/div[1]/div/div[1]/div/div/input"
+)
+model_path = (
+    "/html/body/div[1]/div/div/div/main/div[1]/article/article/fieldset/form/section[1]/div[2]/div/div[1]/div/div/input"
+)
+model_popup_button = (
+    "/html/body/div[1]/div/div/div/main/div[1]/article/article/"
+    "fieldset/form/section[1]/div[2]/div/div/div/div/div/div/button/svg"
+)
+year_path = (
+    "/html/body/div[1]/div/div/div/main/div[1]/article/article/fieldset/form/section[1]/div[4]/div/div[1]/div/div/input"
+)
 submit_path = "/html/body/div[1]/div/div/div/main/div[1]/article/article/fieldset/form/section[2]/button[1]"
 
-ignored_exceptions = (NoSuchElementException,StaleElementReferenceException,)
+ignored_exceptions = (NoSuchElementException, StaleElementReferenceException)
+
 
 @dataclass
 class CarObj:
@@ -23,14 +33,15 @@ class CarObj:
     mileage: str = ""
     year: str = ""
 
+
 class BaseDriver:
     def __init__(self, driver):
         self.driver = driver
 
     def click(self, by, path):
-        xml = self.driver.page_source
         WebDriverWait(self.driver, 20, ignored_exceptions=ignored_exceptions).until(
-            EC.visibility_of_element_located((by, path))).click()
+            EC.visibility_of_element_located((by, path))
+        ).click()
 
     def send_keys(self, by, path, keys):
         element = WebDriverWait(self.driver, 20, ignored_exceptions=ignored_exceptions).until(
@@ -40,25 +51,27 @@ class BaseDriver:
         element.send_keys(keys)
 
     def get_element(self, by, path):
-        element = WebDriverWait(self.driver, 10).until(
-            EC.visibility_of_element_located((by, path))
-        )
+        element = WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located((by, path)))
         return element
 
 
 class MainPageBase(BaseDriver, ABC):
 
     @abstractmethod
-    def set_brand(self, brand): pass
+    def set_brand(self, brand):
+        pass
 
     @abstractmethod
-    def set_model(self, model): pass
+    def set_model(self, model):
+        pass
 
     @abstractmethod
-    def set_year(self, year): pass
+    def set_year(self, year):
+        pass
 
     @abstractmethod
-    def get_cars(self, car): pass
+    def get_cars(self, car):
+        pass
 
 
 class MainPage:
@@ -78,6 +91,7 @@ class MainWebPage(MainPageBase):
         super().__init__(driver)
         self.accept_cookies()
 
+    @retry_on_except()
     def accept_cookies(self):
         self.click(By.ID, "onetrust-accept-btn-handler")
 
@@ -115,7 +129,7 @@ class MainWebPage(MainPageBase):
         self.set_year(car.year)
         self.click(By.XPATH, submit_path)
         results = self.get_element(By.CSS_SELECTOR, '[data-testid="search-results"]')
-        car_elements = results.find_elements(By.CSS_SELECTOR, 'article[data-id]')
+        car_elements = results.find_elements(By.CSS_SELECTOR, "article[data-id]")
         for car in car_elements:
             cars.append(self.parse_car(car))
         return cars
@@ -169,8 +183,7 @@ class MainAndroidPage(MainPageBase):
         scroll_view_element = self.driver.find_element(AppiumBy.CLASS_NAME, "android.widget.ScrollView")
 
         car_elements = scroll_view_element.find_elements(
-            AppiumBy.ANDROID_UIAUTOMATOR,
-            'new UiSelector().className("android.widget.ImageView").clickable(true)'
+            AppiumBy.ANDROID_UIAUTOMATOR, 'new UiSelector().className("android.widget.ImageView").clickable(true)'
         )
         for car in car_elements:
             cars.append(self.parse_car(car))

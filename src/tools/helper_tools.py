@@ -14,5 +14,7 @@ def retry_on_except(retries=3, delay=1):
                     last_exception = e
                     time.sleep(delay)
             raise last_exception
+
         return wrapper
+
     return decorator

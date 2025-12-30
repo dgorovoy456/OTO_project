@@ -1,0 +1,8 @@
+name: system-tests
+on:
+  push:
+jobs:
+  validate-system-tests:
+    uses: ./.github/workflows/setup-base.yml
+    with:
+      run-system-tests: true
