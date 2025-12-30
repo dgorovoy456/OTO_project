@@ -39,6 +39,7 @@ class BaseDriver:
         self.driver = driver
 
     def click(self, by, path):
+        print("some")
         WebDriverWait(self.driver, 20, ignored_exceptions=ignored_exceptions).until(
             EC.visibility_of_element_located((by, path))
         ).click()
@@ -91,7 +92,7 @@ class MainWebPage(MainPageBase):
         super().__init__(driver)
         self.accept_cookies()
 
-    @retry_on_except()
+    @retry_on_except(fail_silently=True)
     def accept_cookies(self):
         self.click(By.ID, "onetrust-accept-btn-handler")
 
