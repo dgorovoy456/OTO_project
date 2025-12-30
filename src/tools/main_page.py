@@ -91,6 +91,7 @@ class MainWebPage(MainPageBase):
         super().__init__(driver)
         self.accept_cookies()
 
+    @retry_on_except()
     def accept_cookies(self):
         self.click(By.ID, "onetrust-accept-btn-handler")
 
