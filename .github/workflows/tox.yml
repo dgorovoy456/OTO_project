@@ -1,0 +1,12 @@
+name: check
+on:
+  push:
+jobs:
+  tox:
+    uses: ./.github/workflows/setup-base.yml
+    with:
+      run-tox: true
+  validate-system-tests:
+    uses: ./.github/workflows/setup-base.yml
+    with:
+      run-system-tests: true
