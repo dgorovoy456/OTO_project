@@ -1,8 +1,8 @@
-name: validate-tox
+name: system-tests
 on:
   push:
 jobs:
-  tox:
+  validate-system-tests:
     uses: ./.github/workflows/setup-base.yml
     with:
-      run-tox: true
+      run-system-tests: true
